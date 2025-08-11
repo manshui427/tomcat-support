@@ -1,0 +1,91 @@
+{
+  "name": "tomcat-support",
+  "displayName": "Tomcat Support",
+  "publisher": "manshui",
+  "description": "支持本地化tomcat发布项目",
+  "version": "0.0.4",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manshui427/support-tomcat.git"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:java",
+    "workspaceContains:pom.xml",
+    "workspaceContains:*/pom.xml",
+    "workspaceContains:.classpath",
+    "workspaceContains:*/.classpath",
+    "onCommand:_java.templateVariables",
+    "onCommand:_java.metadataFilesGeneration"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "support.tomcat.autoPubWhenSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "修改java文件后是否自动发布",
+          "order": 1
+        },
+        "support.tomcat.home": {
+          "type": "string",
+          "markdownDescription": "tomcat文件夹位置",
+          "order": 2
+        },
+        "support.tomcat.port": {
+          "type": "number",
+          "default": 8080,
+          "description": "发布端口",
+          "order": 3
+        },
+        "support.tomcat.debugPort": {
+          "type": "number",
+          "default": 5005,
+          "description": "debug端口",
+          "order": 4
+        },
+        "support.tomcat.contextPath": {
+          "type": "string",
+          "default": "dev",
+          "markdownDescription": "tomcat的发布名称",
+          "order": 5
+        },
+        "support.tomcat.vmOptions": {
+          "type": "string",
+          "markdownDescription": "tomcat启动的时候使用的vm-options",
+          "order": 6
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.96.0",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.21.0",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "prettier": "^3.5.3",
+    "@types/xml2js": "^0.4.11",
+    "iconv-lite": "^0.6.3"
+  },
+  "extensionDependencies": [
+    "redhat.java"
+  ]
+}
