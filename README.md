@@ -16,6 +16,7 @@
 - support.tomcat.debugPort debug端口(5005)
 - support.tomcat.contextPath tomcat的发布名称(默认dev)
 - support.tomcat.vmOptions tomcat启动的时候使用的vm-options
+- support.tomcat.ignores 发布文件的时候需要忽略的文件夹,多个文件夹使用逗号分隔
 
 ## 使用流程
 

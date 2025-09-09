@@ -12,7 +12,6 @@ class JavaService {
   private extensionPath: string;
   private debugPort: number = 0;
   private port: number = 0;
-  private autoPubWhenSave: boolean = false;
   private channel: vscode.OutputChannel;
 
   private updateConfig() {
@@ -22,7 +21,6 @@ class JavaService {
     this.home = tomcat.get('home') || path.join(this.extensionPath, 'resources', 'tomcat9');
     this.debugPort = tomcat.get('debugPort')!;
     this.port = tomcat.get('port')!;
-    this.autoPubWhenSave = tomcat.get('autoPubWhenSave')!;
   }
 
   constructor(context: vscode.ExtensionContext, channel: vscode.OutputChannel) {
@@ -141,11 +139,36 @@ class JavaService {
     fs.cpSync(sourceConfigPath, path.join(targetPath, 'conf'), { recursive: true });
     fs.cpSync(sourceLogPath, path.join(targetPath, 'logs'), { recursive: true });
     //复制新的pub包
-    fs.cpSync(
-      path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, 'src', 'main', 'webapp'),
-      path.join(this.extensionPath, this.contextPath, this.contextPath),
-      { recursive: true },
-    );
+    //判断是否存在ignores
+    const tomcat: vscode.WorkspaceConfiguration = vscode.workspace.getConfiguration('support.tomcat');
+    if (tomcat.ignores && tomcat.ignores.length > 0) {
+      const skipFolders = tomcat.ignores.split(',').map((item: string) => item.trim());
+      fs.cpSync(
+        path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, 'src', 'main', 'webapp'),
+        path.join(this.extensionPath, this.contextPath, this.contextPath),
+        {
+          recursive: true,
+          filter: (src) => {
+            const baseName = path.basename(src);
+
+            if (fs.statSync(src).isDirectory() && skipFolders.includes(baseName)) {
+              return false;
+            }
+
+            return true;
+          },
+        },
+      );
+    } else {
+      fs.cpSync(
+        path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, 'src', 'main', 'webapp'),
+        path.join(this.extensionPath, this.contextPath, this.contextPath),
+        {
+          recursive: true,
+        },
+      );
+    }
+
     fs.cpSync(
       path.join(vscode.workspace.workspaceFolders![0].uri.fsPath, 'target', 'classes'),
       path.join(this.extensionPath, this.contextPath, this.contextPath, 'WEB-INF', 'classes'),

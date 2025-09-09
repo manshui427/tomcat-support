@@ -18,6 +18,16 @@ export class FileService {
 
       const targetPath = path.join(context.extensionPath, tomcat.contextPath);
       let targetFile: string;
+
+      if (tomcat.ignores && tomcat.ignores.length > 0) {
+        tomcat.ignores.split(',').forEach((item: string) => {
+          const ignorePath = item.trim();
+          if (sourceFile.indexOf(ignorePath) > -1) {
+            return;
+          }
+        });
+      }
+
       if (sourceFile.indexOf(javaSource) > -1 && sourceFile.endsWith('java')) {
         //java文件夹下的文件
         targetFile = path.join(targetPath, tomcat.contextPath, 'WEB-INF', 'classes', sourceFile.split(javaSource)[1]).replace('.java', '.class');

@@ -3,7 +3,7 @@
   "displayName": "Tomcat Support",
   "publisher": "manshui",
   "description": "支持本地化tomcat发布项目",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "repository": {
     "type": "git",
     "url": "https://github.com/manshui427/support-tomcat.git"
@@ -60,6 +60,11 @@
           "type": "string",
           "markdownDescription": "tomcat启动的时候使用的vm-options",
           "order": 6
+        },
+        "support.tomcat.ignores": {
+          "type": "string",
+          "markdownDescription": "发布文件的时候需要忽略的文件夹,多个文件夹使用逗号分隔",
+          "order": 7
         }
       }
     }
